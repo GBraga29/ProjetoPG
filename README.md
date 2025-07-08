@@ -48,8 +48,8 @@ ProjetoPG/
 
 #### 2. **Objetos 3D**
 - **Cubo**: Material com shader customizado, posição (-3, 0, 0), escala 1.2x
-- **Esfera**: Textura gradiente radial, posição (3, 0, 0), escala 1.0x
-- **Plano**: Textura xadrez, posição (0, -2, 0), rotacionado horizontalmente
+- **Esfera**: Textura gradiente radial, posição (3, 0, 0), escala 1.0x, movimento de quique
+- **Plano**: Textura xadrez 32x32, posição (0, -2, 0), rotacionado horizontalmente
 
 #### 3. **Câmeras**
 - **Perspectiva**: FOV 75°, posição (5, 5, 5)
@@ -88,13 +88,14 @@ ProjetoPG/
    - Cores que mudam dinamicamente
 
 2. **Esfera com Textura**:
-   - Movimento vertical senoidal (flutuação)
+   - Movimento de quique realista (não atravessa o plano)
    - Rotação no eixo Y
    - Textura gradiente estática
 
 3. **Plano Base**:
    - Rotação suave no eixo Z
    - Textura xadrez com padrão repetido
+   - Tamanho expandido (32x32 unidades)
 
 ## 🚀 Como Executar
 

@@ -220,7 +220,7 @@ function createSphereWithTexture() {
 
 function createPlaneWithCheckerboard() {
     // Geometria do plano
-    const geometry = new THREE.PlaneGeometry(8, 8);
+    const geometry = new THREE.PlaneGeometry(32, 32);
     
     // Criar textura xadrez
     const canvas = createCheckerboardTexture(512, 512);
@@ -337,9 +337,18 @@ function updateAnimations(time) {
         }
     }
     
-    // Animação da esfera (movimento vertical e rotação)
+    // Animação da esfera (movimento de quique e rotação)
     if (sphere) {
-        sphere.position.y = Math.sin(time * 2) * 1.5;
+        // Movimento de quique: a esfera "bate" no plano sem atravessá-lo
+        // Plano está em y = -2, esfera tem raio 1.5
+        // Centro da esfera deve ficar entre y = -0.5 (tocando o plano) e y = 1.0 (altura do quique)
+        const bounceHeight = 1.5; // Altura máxima do quique
+        const minHeight = -0.5;   // Altura mínima (tocando o plano)
+        
+        // Usar abs(sin) para criar movimento de quique mais realista
+        const bounceMotion = Math.abs(Math.sin(time * 3));
+        sphere.position.y = minHeight + (bounceMotion * bounceHeight);
+        
         sphere.rotation.y = time;
     }
     
