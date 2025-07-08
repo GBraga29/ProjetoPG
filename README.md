@@ -33,8 +33,7 @@ ProjetoPG/
 - [x] **Cena 3D inicial** com fundo cinza escuro (`#1a1a1a`)
 - [x] **Objetos 3D simples**: Cubo, esfera e plano
 - [x] **Duas câmeras**: Perspectiva e ortográfica com alternância
-- [x] **Shader customizado** aplicado ao cubo usando `RawShaderMaterial`
-- [x] **Texturas básicas** aplicadas em objetos (gradiente e xadrez)
+- [x] **Texturas básicas** aplicadas em todos os objetos (xadrez, gradiente)
 - [x] **Animações** de rotação e translação nos objetos
 - [x] **Posicionamento e escala** individuais dos objetos
 - [x] **Controles de câmera** com mouse usando `OrbitControls`
@@ -47,7 +46,7 @@ ProjetoPG/
 - Luz direcional principal (0xffffff)
 
 #### 2. **Objetos 3D**
-- **Cubo**: Material com shader customizado, posição (-3, 0, 0), escala 1.2x
+- **Cubo**: Textura xadrez, posição (-3, 0.5, 0), estático flutuando sobre o plano
 - **Esfera**: Textura gradiente radial, posição (3, 0, 0), escala 1.0x, movimento de quique
 - **Plano**: Textura xadrez 32x32, posição (0, -2, 0), rotacionado horizontalmente
 
@@ -56,14 +55,12 @@ ProjetoPG/
 - **Ortográfica**: Frustum 10x10, mesma posição
 - Alternância com tecla `C`
 
-#### 4. **Shader Customizado**
-- **Vertex Shader**: Cria ondulações baseadas em seno/cosseno
-- **Fragment Shader**: Cores animadas baseadas na posição e tempo
-- Uniforms: `time`, `projectionMatrix`, `modelViewMatrix`
+#### 4. **Texturas Aplicadas**
+- **Cubo e Plano**: Textura xadrez procedural (padrão alternado)
+- **Esfera**: Textura gradiente radial (amarelo → laranja → rosa)
+- **Geração**: Texturas criadas via HTML5 Canvas
 
-#### 5. **Texturas Procedurais**
-- **Gradiente**: Cores do amarelo ao rosa (#ffeb3b → #e91e63)
-- **Xadrez**: Padrão alternado vermelho/turquesa (#ff6b6b / #4ecdc4)
+
 
 ## 🎮 Como Interagir com a Cena
 
@@ -82,10 +79,10 @@ ProjetoPG/
 
 ## 🎭 Animações Implementadas
 
-1. **Cubo com Shader**:
-   - Rotação contínua nos eixos X e Y
-   - Ondulações procedurais na superfície
-   - Cores que mudam dinamicamente
+1. **Cubo com Textura**:
+   - Objeto estático flutuando sobre o plano
+   - Textura xadrez aplicada
+   - Sem animações (objeto de referência)
 
 2. **Esfera com Textura**:
    - Movimento de quique realista (não atravessa o plano)
@@ -114,19 +111,14 @@ ProjetoPG/
 ### 📦 Módulos Principais
 
 1. **Inicialização** (`init()`):
-   - Carregamento assíncrono de shaders
    - Configuração da cena, câmeras e renderer
    - Criação de objetos e configuração de eventos
 
-2. **Gerenciamento de Shaders** (`loadShaders()`):
-   - Carregamento dinâmico de arquivos GLSL
-   - Fallback para shaders inline em caso de erro
-
-3. **Criação de Objetos** (`createObjects()`):
+2. **Criação de Objetos** (`createObjects()`):
    - Factory methods para cada tipo de objeto
    - Aplicação de materiais e texturas específicos
 
-4. **Loop de Animação** (`animate()`):
+3. **Loop de Animação** (`animate()`):
    - Renderização contínua a 60 FPS
    - Atualização de animações baseadas no tempo
    - Sincronização com `requestAnimationFrame`
@@ -135,25 +127,22 @@ ProjetoPG/
 
 - **Damping nos controles**: Suaviza movimentos da câmera
 - **Reutilização de texturas**: Canvas gerados uma única vez
-- **Uniforms otimizados**: Apenas `time` é atualizado por frame
 - **Geometrias simples**: Baixo número de vértices para performance
+- **Animações otimizadas**: Cálculos matemáticos eficientes
 
 ## 🎓 Valor Acadêmico
 
 Este projeto demonstra:
 - **Fundamentos de WebGL** através do Three.js
-- **Programação de shaders** em GLSL
+- **Texturas procedurais** e mapeamento UV
 - **Transformações 3D** (rotação, translação, escala)
 - **Sistemas de coordenadas** e projeções
-- **Texturas procedurais** e mapeamento UV
 - **Iluminação básica** (ambiente + direcional)
 - **Controles de câmera** e interatividade
 - **Arquitetura modular** de aplicações gráficas
+- **Animações baseadas em tempo** e física básica
 
 ## 🐛 Troubleshooting
-
-### Problema: Shaders não carregam
-**Solução**: O código possui fallback automático para shaders inline
 
 ### Problema: Texturas não aparecem
 **Solução**: Verifique se o arquivo `texture-generator.js` está carregando

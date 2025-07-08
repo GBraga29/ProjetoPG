@@ -6,22 +6,17 @@
 let scene, renderer, controls;
 let perspectiveCamera, orthographicCamera, currentCamera;
 let cube, sphere, plane;
-let customShaderMaterial;
 let clock;
+let cubeColors = [0xff8000, 0x00ff00, 0x0077ff, 0xff00ff, 0xffffff];
+let currentColorIndex = 0;
 
-// Carregar shaders
-let vertexShader = '';
-let fragmentShader = '';
 
 // ========================================
 // INICIALIZAÇÃO
 // ========================================
 
-async function init() {
+function init() {
     console.log('Inicializando projeto Three.js...');
-    
-    // Carregar shaders
-    await loadShaders();
     
     // Criar cena
     createScene();
@@ -48,57 +43,7 @@ async function init() {
     console.log('Projeto inicializado com sucesso!');
 }
 
-// ========================================
-// CARREGAMENTO DE SHADERS
-// ========================================
 
-async function loadShaders() {
-    try {
-        // Carregar vertex shader
-        const vertexResponse = await fetch('shaders/custom-vertex.glsl');
-        vertexShader = await vertexResponse.text();
-        
-        // Carregar fragment shader
-        const fragmentResponse = await fetch('shaders/custom-fragment.glsl');
-        fragmentShader = await fragmentResponse.text();
-        
-        console.log('Shaders carregados com sucesso');
-    } catch (error) {
-        console.error('Erro ao carregar shaders:', error);
-        // Fallback para shaders inline
-        vertexShader = `
-            attribute vec3 position;
-            attribute vec2 uv;
-            uniform mat4 projectionMatrix;
-            uniform mat4 modelViewMatrix;
-            uniform float time;
-            varying vec2 vUv;
-            varying vec3 vPosition;
-            
-            void main() {
-                vUv = uv;
-                vPosition = position;
-                vec3 newPosition = position;
-                newPosition.z += sin(position.x * 10.0 + time) * 0.1;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-            }
-        `;
-        
-        fragmentShader = `
-            precision mediump float;
-            uniform float time;
-            varying vec2 vUv;
-            varying vec3 vPosition;
-            
-            void main() {
-                float r = sin(vPosition.x * 5.0 + time) * 0.5 + 0.5;
-                float g = cos(vPosition.y * 5.0 + time) * 0.5 + 0.5;
-                float b = sin(vPosition.z * 5.0 + time * 2.0) * 0.5 + 0.5;
-                gl_FragColor = vec4(r, g, b, 1.0);
-            }
-        `;
-    }
-}
 
 // ========================================
 // CRIAÇÃO DA CENA
@@ -168,8 +113,8 @@ function createRenderer() {
 // ========================================
 
 function createObjects() {
-    // 1. CUBO COM SHADER CUSTOMIZADO
-    createCubeWithCustomShader();
+    // 1. CUBO COM TEXTURA
+    createCubeWithTexture();
     
     // 2. ESFERA COM TEXTURA
     createSphereWithTexture();
@@ -178,25 +123,14 @@ function createObjects() {
     createPlaneWithCheckerboard();
 }
 
-function createCubeWithCustomShader() {
-    // Geometria do cubo
+function createCubeWithTexture() {
     const geometry = new THREE.BoxGeometry(2, 2, 2);
-    
-    // Material com shader customizado
-    customShaderMaterial = new THREE.RawShaderMaterial({
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader,
-        uniforms: {
-            time: { value: 0.0 },
-            projectionMatrix: { value: new THREE.Matrix4() },
-            modelViewMatrix: { value: new THREE.Matrix4() }
-        }
-    });
-    
-    // Criar cubo
-    cube = new THREE.Mesh(geometry, customShaderMaterial);
-    cube.position.set(-3, 0, 0);
-    cube.scale.set(1.2, 1.2, 1.2);
+
+    const material = new THREE.MeshLambertMaterial({ color: cubeColors[currentColorIndex] });
+
+    cube = new THREE.Mesh(geometry, material);
+    cube.position.set(-3, 0.5, 0);
+    cube.scale.set(1.0, 1.0, 1.0);
     scene.add(cube);
 }
 
@@ -289,7 +223,18 @@ function onKeyDown(event) {
         case 'KeyC':
             toggleCamera();
             break;
+        case 'KeyV':
+            changeCubeColor();
+            break;
     }
+}
+
+function changeCubeColor() {
+    if (!cube) return;
+
+    currentColorIndex = (currentColorIndex + 1) % cubeColors.length;
+    cube.material.color.setHex(cubeColors[currentColorIndex]);
+    console.log(`Cor do cubo alterada para: ${cubeColors[currentColorIndex].toString(16)}`);
 }
 
 function toggleCamera() {
@@ -326,16 +271,7 @@ function animate() {
 }
 
 function updateAnimations(time) {
-    // Animação do cubo (rotação e shader)
-    if (cube) {
-        cube.rotation.x = time * 0.5;
-        cube.rotation.y = time * 0.7;
-        
-        // Atualizar uniform do shader
-        if (customShaderMaterial) {
-            customShaderMaterial.uniforms.time.value = time;
-        }
-    }
+    // Cubo estático - sem animações
     
     // Animação da esfera (movimento de quique e rotação)
     if (sphere) {
