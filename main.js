@@ -125,7 +125,7 @@ function createObjects() {
     // 4. PRISMA (OCTAEDRO)
     createPrism();
 
-    // 4. AVIÃO
+    // 5. AVIÃO
     createAirplane();
 }
 
@@ -149,20 +149,6 @@ function createAirplane() {
     leftWing.position.set(0, 0.1, 0); // Ajuste a posição para centralizar as asas
     airplaneGroup.add(leftWing);
 
-    // Cauda (fin vertical)
-    const tailFinGeometry = new THREE.BoxGeometry(0.1, 0.8, 0.8);
-    const tailFinMaterial = new THREE.MeshLambertMaterial({ color: 0x606060 });
-    const tailFin = new THREE.Mesh(tailFinGeometry, tailFinMaterial);
-    tailFin.position.set(0, 0.4, 1.3);
-    airplaneGroup.add(tailFin);
-
-    // Hélice (simples cilindro)
-    const propellerGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.1, 16);
-    const propellerMaterial = new THREE.MeshLambertMaterial({ color: 0x404040 });
-    const propeller = new THREE.Mesh(propellerGeometry, propellerMaterial);
-    propeller.position.set(0, 0, -1.6);
-    propeller.rotation.x = Math.PI / 2; // Rotação para ficar na horizontal
-    airplaneGroup.add(propeller);
 
     airplaneGroup.position.set(0, 2, 0); // Posição inicial do avião
     airplane = airplaneGroup;
@@ -372,6 +358,33 @@ function updateAnimations(time) {
         // Efeito de escala pulsante
         const scale = 1.0 + Math.sin(time * 3) * 0.1;
         prism.scale.set(scale, scale, scale);
+    }
+
+    // Animação do avião (movimento circular)
+    if (airplane) {
+        // Raio do círculo
+        const radius = 8;
+        // Velocidade da rotação
+        const speed = 0.5;
+        
+        // Calcular posição em círculo
+        const x = Math.cos(time * speed) * radius;
+        const z = Math.sin(time * speed) * radius;
+        
+        // Atualizar posição do avião
+        airplane.position.x = x;
+        airplane.position.z = z;
+        airplane.position.y = 2; // Mantém altura constante
+        
+        // Criar um ponto à frente do avião na direção do movimento
+        const targetX = Math.cos(time * speed + Math.PI/32) * radius;
+        const targetZ = Math.sin(time * speed + Math.PI/32) * radius;
+        
+        // Fazer o avião olhar para a direção do movimento
+        airplane.lookAt(targetX, 2, targetZ);
+        
+        // Inclinar o avião levemente para o centro
+        airplane.rotation.z = Math.atan2(2, radius) * 0.5;
     }
 }
 

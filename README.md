@@ -31,10 +31,10 @@ ProjetoPG/
 
 ### 🌟 Funcionalidades Básicas
 - [x] **Cena 3D inicial** com fundo cinza escuro (`#1a1a1a`)
-- [x] **Objetos 3D simples**: Cubo, esfera e plano
+- [x] **Objetos 3D simples**: Cubo, esfera, plano e avião
 - [x] **Duas câmeras**: Perspectiva e ortográfica com alternância
 - [x] **Texturas básicas** aplicadas em todos os objetos (xadrez, gradiente)
-- [x] **Animações** de rotação e translação nos objetos
+- [x] **Animações** de rotação, translação e movimento circular
 - [x] **Posicionamento e escala** individuais dos objetos
 - [x] **Controles de câmera** com mouse usando `OrbitControls`
 
@@ -49,6 +49,7 @@ ProjetoPG/
 - **Cubo**: Textura xadrez, posição (-3, 0.5, 0), estático flutuando sobre o plano
 - **Esfera**: Textura gradiente radial, posição (3, 0, 0), escala 1.0x, movimento de quique
 - **Plano**: Textura xadrez 32x32, posição (0, -2, 0), rotacionado horizontalmente
+- **Avião**: Modelo 3D simples composto por corpo e asas, realizando movimento circular ao redor da cena
 
 #### 3. **Câmeras**
 - **Perspectiva**: FOV 75°, posição (5, 5, 5)
@@ -93,6 +94,13 @@ ProjetoPG/
    - Rotação suave no eixo Z
    - Textura xadrez com padrão repetido
    - Tamanho expandido (32x32 unidades)
+
+4. **Avião**:
+   - Movimento circular contínuo ao redor dos objetos centrais
+   - Orientação automática na direção do movimento
+   - Inclinação suave para o centro da curva
+   - Altura constante durante o voo
+   - Raio de voo de 8 unidades
 
 ## 🚀 Como Executar
 
