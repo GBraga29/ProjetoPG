@@ -5,7 +5,7 @@
 // Variáveis globais
 let scene, renderer, controls;
 let perspectiveCamera, orthographicCamera, currentCamera;
-let cube, sphere, plane;
+let cube, sphere, plane, prism;
 let clock;
 let cubeColors = [0xff8000, 0x00ff00, 0x0077ff, 0xff00ff, 0xffffff];
 let currentColorIndex = 0;
@@ -121,6 +121,9 @@ function createObjects() {
     
     // 3. PLANO COM TEXTURA XADREZ
     createPlaneWithCheckerboard();
+    
+    // 4. PRISMA (OCTAEDRO)
+    createPrism();
 
     // 4. AVIÃO
     createAirplane();
@@ -215,6 +218,25 @@ function createPlaneWithCheckerboard() {
     plane.rotation.x = -Math.PI / 2;
     plane.position.set(0, -2, 0);
     scene.add(plane);
+}
+
+function createPrism() {
+    // Geometria do prisma (octaedro)
+    const geometry = new THREE.OctahedronGeometry(1.2, 0);
+    
+    // Material com cor roxa e brilho
+    const material = new THREE.MeshPhongMaterial({ 
+        color: 0x9c27b0,
+        shininess: 100,
+        transparent: true,
+        opacity: 0.8
+    });
+    
+    // Criar prisma
+    prism = new THREE.Mesh(geometry, material);
+    prism.position.set(0, 1.5, 0);
+    prism.scale.set(1.0, 1.0, 1.0);
+    scene.add(prism);
 }
 
 // ========================================
@@ -335,6 +357,21 @@ function updateAnimations(time) {
     // Animação do plano (rotação suave)
     if (plane) {
         plane.rotation.z = Math.sin(time * 0.3) * 0.1;
+    }
+    
+    // Animação do prisma (rotação 3D e flutuação)
+    if (prism) {
+        // Rotação em múltiplos eixos
+        prism.rotation.x = time * 0.5;
+        prism.rotation.y = time * 0.8;
+        prism.rotation.z = time * 0.3;
+        
+        // Movimento de flutuação suave
+        prism.position.y = 1.5 + Math.sin(time * 2) * 0.3;
+        
+        // Efeito de escala pulsante
+        const scale = 1.0 + Math.sin(time * 3) * 0.1;
+        prism.scale.set(scale, scale, scale);
     }
 }
 
