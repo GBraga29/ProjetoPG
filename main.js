@@ -121,6 +121,50 @@ function createObjects() {
     
     // 3. PLANO COM TEXTURA XADREZ
     createPlaneWithCheckerboard();
+
+    // 4. AVIÃO
+    createAirplane();
+}
+
+// ========================================
+// CRIAÇÃO DO AVIÃO
+// ========================================
+
+function createAirplane() {
+    const airplaneGroup = new THREE.Group();
+
+    // Corpo do avião
+    const bodyGeometry = new THREE.BoxGeometry(1, 0.5, 3);
+    const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 }); // Cinza
+    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    airplaneGroup.add(body);
+
+    // Asas
+    const wingGeometry = new THREE.BoxGeometry(4, 0.1, 1);
+    const wingMaterial = new THREE.MeshLambertMaterial({ color: 0x606060 }); // Cinza mais escuro
+    const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
+    leftWing.position.set(0, 0.1, 0); // Ajuste a posição para centralizar as asas
+    airplaneGroup.add(leftWing);
+
+    // Cauda (fin vertical)
+    const tailFinGeometry = new THREE.BoxGeometry(0.1, 0.8, 0.8);
+    const tailFinMaterial = new THREE.MeshLambertMaterial({ color: 0x606060 });
+    const tailFin = new THREE.Mesh(tailFinGeometry, tailFinMaterial);
+    tailFin.position.set(0, 0.4, 1.3);
+    airplaneGroup.add(tailFin);
+
+    // Hélice (simples cilindro)
+    const propellerGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.1, 16);
+    const propellerMaterial = new THREE.MeshLambertMaterial({ color: 0x404040 });
+    const propeller = new THREE.Mesh(propellerGeometry, propellerMaterial);
+    propeller.position.set(0, 0, -1.6);
+    propeller.rotation.x = Math.PI / 2; // Rotação para ficar na horizontal
+    airplaneGroup.add(propeller);
+
+    airplaneGroup.position.set(0, 2, 0); // Posição inicial do avião
+    airplane = airplaneGroup;
+    scene.add(airplane);
+    console.log('Avião criado e adicionado à cena!');
 }
 
 function createCubeWithTexture() {
